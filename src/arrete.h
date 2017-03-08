@@ -6,8 +6,10 @@
 class arrete{
 
 private :
+
   noeud i;
   noeud j;
+  
 
 public :
 //constructors
