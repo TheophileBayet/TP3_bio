@@ -18,6 +18,4 @@ void setNum(int n);
 int getNum(int n);
 
 };
-
-
 #endif
