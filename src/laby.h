@@ -12,9 +12,9 @@ laby();
 //destructor
 ~laby();
 // add a node
-addNode(noeud i);
+void addNode(noeud i);
 // add a link
-addLink(arrete arr);
+void addLink(noeud i,noeud j,int q, int l, int d );
 
 
 };

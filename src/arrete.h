@@ -1,29 +1,36 @@
 #ifndef ARRETE
 #define ARRETE
 
-#include"noeuh.h"
+#include"noeud.h"
 
 class arrete{
 
 private :
 
-  noeud i;
-  noeud j;
-  
+  noeud* i;
+  noeud* j;
+  int q; //flux
+  int l; // longueur
+  int d; // conducivité
 
 public :
 //constructors
 arrete();
-arrete(i,j);
+arrete(noeud i,noeud j,int q, int l, int d);
 //destructor
 ~arrete();
-// set the nodes
+// setters for the node
 void setI(noeud i);
 void setJ(noeud j);
+void setQ(int q);
+void setL(int l);
+void setD(int d);
 // accessors for the nodes
-int getI();
-int getJ();
-
+noeud getI();
+noeud getJ();
+int getQ();
+int getL();
+int getD();
 
 };
 #endif
