@@ -1,0 +1,51 @@
+Partie 1
+
+1)
+L'évolution se fait dans toutes les directions, de manière uniforme, développant des
+d'infimes veines dans toutes les directions . Le réseau de veine se développe au
+ fur et à mesure, maintenant et grossissant les veines utilisées et supprimant
+ les inutiles.
+
+
+ 2)
+ Beaucoup de ressemblance avec le réseau feroviaire, même si celui-ci est moins
+ complet.
+
+ 3)
+ Dans le contexte d'un réseau de transport, cet arbre représente les axes
+ principaux de circulation, ou le graphe de proximité des agglomérations. Cela revient
+ à relier toutes les villes avec un minimum de voies possibles.
+ L'arbre est encore moins complet que le réseau ferroviaire, et inclus dans
+ le réseau généré par P.Polycephalum.
+Pour avoir un MST qui respecte le tracé de ma côte maritime, il faudrait
+rajouter retirer l'arrête la plus basse et la diriger vers le point en bas à droite.
+
+4)
+
+
+
+
+
+5)
+analogie : voies efficaces qui permettent une distribution et un transport optimaux.
+Différence : la construction . dans le cas du réseau de veines, on a une expansion
+uniforme, puis la mort des veines inutiles et le grossissement au contraire de
+celles utiles. Mais on peut faire cette analogie avec des chemins qui ont été
+oubliés entre des villes, tandis que les voies fréquentées sont devenues des routes,
+puis des voies ferrées...
+
+
+
+
+Partie 2 :
+
+1)
+De la nourriture sur les parties rondes et carrées, représentant les noeuds du
+labyrinthe.
+On utilise des raies de lumière pour empêcher la P.Polycephalum de lier deux noeuds
+qui ne devraient pas l'être. On la dépose ensuite sur l'entrée du labyrinthe, et
+on observe sa progression jusqu'à la sortie.
+
+2) cf papier.
+
+3) cf papier.
