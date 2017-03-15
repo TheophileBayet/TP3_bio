@@ -58,3 +58,12 @@ void laby::set(int i, int j, double val){
       matrice[i][j]=val;
     }
 }
+
+double laby::getValue(int i, int j ){
+  if (!((i<nbNoeud) && (i>=0) && (j>=0) &&(j<nbNoeud))){
+    std::cout << "Les indices dans la matrice ne correspondent pas." << std::endl;
+    return 0;
+  } else {
+    return matrice[i][j];
+  }
+}

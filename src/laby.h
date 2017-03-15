@@ -27,5 +27,7 @@ void display();
 bool isArrete(int i,int j);
 // initialise une valeur dans la matrice
 void set(int i , int j , double val);
+// return the value in the laby
+double getValue(int i , int j);
 };
 #endif

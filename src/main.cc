@@ -1,4 +1,5 @@
 #include"laby.h"
+#include<iostream>
 
 int main(int argc, char **argv)
 {
@@ -6,6 +7,10 @@ int main(int argc, char **argv)
   //lab->display();
   laby *conductivite = new laby(23);
   laby *labyrinthe = new laby(23);
+  laby *A = new laby(23);
+  double dInit = 1;
+  double Q0 = 1;
+  double b[23];
 
   //initialisation des longueurs
   longueur->set(0,2 ,7);
@@ -57,6 +62,110 @@ int main(int argc, char **argv)
   longueur->set(1,14,3);
   longueur->set(14,1,3);
 
+  // affichage des longueurs
+  std::cout << "Les longueurs sont :" << std::endl;
   longueur->display();
+
+  // initialisation de la conductivité
+  conductivite->set(0,2 ,dInit);
+  conductivite->set(2,0,dInit);
+  conductivite->set(2,4,dInit);
+  conductivite->set(4,2,dInit);
+  conductivite->set(2,3,dInit);
+  conductivite->set(3,2,dInit);
+  conductivite->set(3,4,dInit);
+  conductivite->set(4,3,dInit);
+  conductivite->set(3,13,dInit);
+  conductivite->set(13,3,dInit);
+  conductivite->set(4,5,dInit);
+  conductivite->set(5,4,dInit);
+  conductivite->set(5,6,dInit);
+  conductivite->set(6,5,dInit);
+  conductivite->set(6,7,dInit);
+  conductivite->set(7,6,dInit);
+  conductivite->set(6,15,dInit);
+  conductivite->set(15,6,dInit);
+  conductivite->set(15,16,dInit);
+  conductivite->set(16,15,dInit);
+  conductivite->set(15,17,dInit);
+  conductivite->set(17,15,dInit);
+  conductivite->set(17,18,dInit);
+  conductivite->set(18,17,dInit);
+  conductivite->set(17,19,dInit);
+  conductivite->set(19,17,dInit);
+  conductivite->set(19,20,dInit);
+  conductivite->set(20,19,dInit);
+  conductivite->set(19,21,dInit);
+  conductivite->set(21,19,dInit);
+  conductivite->set(5,8,dInit);
+  conductivite->set(8,5,dInit);
+  conductivite->set(8,9,dInit);
+  conductivite->set(9,8,dInit);
+  conductivite->set(9,10,dInit);
+  conductivite->set(10,9,dInit);
+  conductivite->set(10,7,dInit);
+  conductivite->set(7,10,dInit);
+  conductivite->set(8,11,dInit);
+  conductivite->set(11,8,dInit);
+  conductivite->set(9,22,dInit);
+  conductivite->set(22,9,dInit);
+  conductivite->set(10,12,dInit);
+  conductivite->set(12,10,dInit);
+  conductivite->set(7,14,dInit);
+  conductivite->set(14,7,dInit);
+  conductivite->set(1,14,dInit);
+  conductivite->set(14,1,dInit);
+
+  // affichage de la conductivite
+    std::cout << "La conductivite est :" << std::endl;
+  conductivite->display();
+
+  // initialisation du labyrinthe
+  for (int i =0 ; i< 23; i++){
+      for (int j =0; j<23; j++){
+        if (longueur->getValue(i,j)==0){
+          labyrinthe->set(i,j,0);
+        } else {
+          labyrinthe->set(i,j,conductivite->getValue(i,j)/longueur->getValue(i,j));
+        }
+      }
+  }
+
+  // affichage du labyrinthe
+  std::cout << "Le labyrinthe est :" << std::endl;
+  labyrinthe->display();
+
+  // initialisation de b
+  b[0]=Q0;
+  b[1]=-Q0;
+  for (int i =2; i<23; i++){
+    b[i]=0;
+  }
+
+  //affichage de b
+  std::cout << "Le vecteur b est : [" ;
+  for (int i =0 ; i<23; i++){
+    std::cout << b[i]<<"|" ;
+  }
+  std::cout << " ]" << std::endl;
+
+  //initialisation de A
+  for (int i = 0 ; i<23; i++){
+      for (int j = 0 ; j<23 ; j++){
+        if (i!=j){
+          A->set(i,j,-labyrinthe->getValue(i,j));
+        } else {
+          double somme = 0;
+          for (int k =0 ;  k<23 ; k++){
+            somme += labyrinthe->getValue(i,k);
+          }
+          A->set(i,j,somme);
+        }
+      }
+  }
+
+  // affichage de A
+  std::cout << "La matrcie A est :" << std::endl;
+  A->display();
 return 0;
 }
