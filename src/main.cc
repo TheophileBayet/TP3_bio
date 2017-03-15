@@ -1,7 +1,12 @@
 #include"laby.h"
+#include <armadillo>
+using namespace arma;
+
 
 int main(int argc, char **argv)
 {
+  mat A = randu<mat>(4,5);
+  std::cout << A.t() << std::endl;
   laby *longueur = new laby(23);
   //lab->display();
   laby *conductivite = new laby(23);

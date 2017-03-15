@@ -1,4 +1,7 @@
 #include"noeud.h"
+#include <armadillo>
+
+using namespace arma;
 
 
 
