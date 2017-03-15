@@ -36,10 +36,10 @@ void arrete::setD(int d){
 }
 // accessors for the nodes
 noeud arrete::getI(){
-  return i;
+  return *i;
 }
 noeud arrete::getJ(){
-  return j;
+  return *j;
 }
 int arrete::getQ(){
   return q;
