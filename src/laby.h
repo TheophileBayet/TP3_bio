@@ -3,11 +3,13 @@
 
 #include"noeud.h"
 #include"arrete.h"
+#include <armadillo>
+using namespace arma;
 
 class laby{
 private :
   // la matrice des longueur entre les points
-  double **matrice;
+  mat matrice;
   int nbNoeud;
 
 public :
@@ -29,5 +31,7 @@ bool isArrete(int i,int j);
 void set(int i , int j , double val);
 // return the value in the laby
 double getValue(int i , int j);
+//returns the matrice
+mat getMat();
 };
 #endif

@@ -4,18 +4,32 @@
 using namespace arma;
 
 
+void integration(laby *D, laby *Q, double const alpha, double const  g, double const pas){
+  for (int i = 0 ; i<23; i++){
+      for (int j = 0 ; j<23 ; j++){
+        D->set(i,j,(alpha*(Q->getValue(i,j))-g*D->getValue(i,j))*pas);
+      }
+    }
+}
+
 int main(int argc, char **argv)
 {
-  mat A = randu<mat>(4,5);
-  std::cout << A.t() << std::endl;
+  bool cond = true;
+  //mat Arobase = randu<mat>(4,5);
+  //std::cout << Arobase.t() << std::endl;
   laby *longueur = new laby(23);
   //lab->display();
+
   laby *conductivite = new laby(23);
   laby *labyrinthe = new laby(23);
   laby *A = new laby(23);
   double dInit = 1;
   double Q0 = 1;
   double b[23];
+  double p[23];
+  double alpha = 1;
+  double g = 1;
+  double pas_int = 0.1;
 
   //initialisation des longueurs
   longueur->set(0,2 ,7);
@@ -172,5 +186,30 @@ int main(int argc, char **argv)
   // affichage de A
   std::cout << "La matrcie A est :" << std::endl;
   A->display();
+  int count;
+  while(cond){
+    // TODO : resolve Pi
+    // Calcul des Qij selon les pij :
+      for (int i = 0 ; i<23; i++){
+        for (int j = 0 ; j<23 ; j++){
+          if (longueur->getValue(i,j)==0){
+            labyrinthe->set(i,j,0);
+          } else {
+            labyrinthe->set(i,j,(conductivite->getValue(i,j)/longueur->getValue(i,j))*(p[i]-p[j]));
+          }
+        }
+      }
+    //  quelques pas d'intégration suivant (3)
+    mat D = conductivite->getMat();
+    mat copie = mat(D);
+    integration(conductivite,labyrinthe,alpha,g,pas_int);
+    if(approx_equal(copie,D,"absdiff",0)){
+      cond=false;
+    }
+    count++;
+    //std::cout<<"hello"<<std::endl;
+  }
+std::cout<<count<<std::endl;
+
 return 0;
 }
