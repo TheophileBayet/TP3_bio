@@ -7,9 +7,34 @@ using namespace arma;
 void integration(laby *D, laby *Q, double const alpha, double const  g, double const pas){
   for (int i = 0 ; i<23; i++){
       for (int j = 0 ; j<23 ; j++){
-        D->set(i,j,(alpha*(Q->getValue(i,j))-g*D->getValue(i,j))*pas);
+        D->set(i,j,D->getValue(i,j)+(alpha*(Q->getValue(i,j))-g*D->getValue(i,j))*pas);
       }
     }
+}
+
+void update_A(laby *A, laby *D, laby *L ){
+  for (int i = 0 ; i<12; i++){
+      for (int j = 0 ; j<12 ; j++){
+        double lij = L->getValue(i,j);
+        double dij = D->getValue(i,j);
+        if (i!=j){
+          if(lij==0){
+            A->set(i,j,0);
+            A->set(j,i,0);
+          }else{
+          A->set(i,j,-dij/lij);
+          A->set(j,i,-dij/lij);
+          }
+        } else {
+          double somme = 0;
+          for (int k =0 ;  k<23 ; k++){
+            if(L->getValue(i,k)!=0){
+            somme += D->getValue(i,k) / L->getValue(i,k);}
+          }
+          A->set(i,j,somme);
+        }
+      }
+  }
 }
 
 int main(int argc, char **argv)
@@ -24,12 +49,12 @@ int main(int argc, char **argv)
   laby *labyrinthe = new laby(23);
   laby *A = new laby(23);
   double dInit = 1;
-  double Q0 = 1;
-  double b[23];
-  double p[23];
+  double Q0 = 0.01;
+  vec b= zeros<vec>(23);
+  vec Pi;
   double alpha = 1;
   double g = 1;
-  double pas_int = 0.1;
+  double pas_int = 0.00001;
 
   //initialisation des longueurs
   longueur->set(0,2 ,7);
@@ -81,9 +106,10 @@ int main(int argc, char **argv)
   longueur->set(1,14,3);
   longueur->set(14,1,3);
 
+/*
   // affichage des longueurs
   std::cout << "Les longueurs sont :" << std::endl;
-  longueur->display();
+  longueur->display();*/
 
   // initialisation de la conductivité
   conductivite->set(0,2 ,dInit);
@@ -135,10 +161,11 @@ int main(int argc, char **argv)
   conductivite->set(1,14,dInit);
   conductivite->set(14,1,dInit);
 
+/*
   // affichage de la conductivite
     std::cout << "La conductivite est :" << std::endl;
   conductivite->display();
-
+*/
   // initialisation du labyrinthe
   for (int i =0 ; i< 23; i++){
       for (int j =0; j<23; j++){
@@ -150,16 +177,18 @@ int main(int argc, char **argv)
       }
   }
 
+/*
   // affichage du labyrinthe
   std::cout << "Le labyrinthe est :" << std::endl;
-  labyrinthe->display();
+  labyrinthe->display();*/
 
   // initialisation de b
-  b[0]=Q0;
-  b[1]=-Q0;
+  b(0)=Q0;
+  b(1)=0;
+  /*
   for (int i =2; i<23; i++){
     b[i]=0;
-  }
+  }*/
 
   //affichage de b
   std::cout << "Le vecteur b est : [" ;
@@ -171,6 +200,9 @@ int main(int argc, char **argv)
   //initialisation de A
   for (int i = 0 ; i<23; i++){
       for (int j = 0 ; j<23 ; j++){
+        if(i==1){// On est sur p2, la sortie
+          if(j!=1){A->set(i,j,0);}else{A->set(i,j,1);}
+        }else{
         if (i!=j){
           A->set(i,j,-labyrinthe->getValue(i,j));
         } else {
@@ -181,21 +213,36 @@ int main(int argc, char **argv)
           A->set(i,j,somme);
         }
       }
+    }
   }
+
 
   // affichage de A
   std::cout << "La matrcie A est :" << std::endl;
   A->display();
-  int count;
+  std::cout << " Rang de A : " << rank(A->getMat())<<std::endl;
+/*
+// TEST DU SOLVE DE ARMADILLO
+  mat test_A(3,3,fill::eye);
+  vec test_b(3);
+  test_b.fill(1);
+  std::cout << " mat b " << test_b.t()<< std::endl;
+  vec test_sol = solve(test_A,test_b);
+  std::cout << "TEST DU SOLVE : TEST SIMPLE " << std::endl;
+  std::cout<< "matrice A : " <<std::endl<< test_A.t()<<std::endl;
+  std::cout<< "matrice b : " <<std::endl<< test_b.t()<<std::endl;
+  std::cout<<"matrice solv : " << test_sol.t()<<std::endl;*/
+
+  int count=0;
   while(cond){
-    // TODO : resolve Pi
+    Pi=solve(A->getMat(),b);
     // Calcul des Qij selon les pij :
       for (int i = 0 ; i<23; i++){
         for (int j = 0 ; j<23 ; j++){
           if (longueur->getValue(i,j)==0){
             labyrinthe->set(i,j,0);
           } else {
-            labyrinthe->set(i,j,(conductivite->getValue(i,j)/longueur->getValue(i,j))*(p[i]-p[j]));
+            labyrinthe->set(i,j,(conductivite->getValue(i,j)/longueur->getValue(i,j))*(Pi[i]-Pi[j]));
           }
         }
       }
@@ -203,13 +250,20 @@ int main(int argc, char **argv)
     mat D = conductivite->getMat();
     mat copie = mat(D);
     integration(conductivite,labyrinthe,alpha,g,pas_int);
-    if(approx_equal(copie,D,"absdiff",0)){
+    copie = copie - conductivite->getMat();
+    //std::cout<<"copie : " << copie.t()<<std::endl;
+    if(approx_equal(copie,conductivite->getMat(),"absdiff",0)){
+      std::cout<<" condition à false"<<std::endl;
       cond=false;
     }
     count++;
-    //std::cout<<"hello"<<std::endl;
+    //Mettre A à jour :
+    update_A(A,conductivite,longueur);
+   if(count==20000) cond = false;
   }
 std::cout<<count<<std::endl;
-
+std::cout<< "matrice A : " <<std::endl<< A->getMat().t()<<std::endl;
+std::cout<< "matrice Q : " <<std::endl<< labyrinthe->getMat().t()<<std::endl;
+std::cout<< "matrice P : " <<std::endl<< Pi.t()<<std::endl;
 return 0;
 }
