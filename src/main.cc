@@ -4,6 +4,9 @@
 using namespace arma;
 
 
+/**
+* Sert à faire un pas d'intégration sur l'eq différentielle (3)
+**/
 void integration(laby *D, laby *Q, double const alpha, double const  g, double const pas){
   for (int i = 0 ; i<23; i++){
       for (int j = 0 ; j<23 ; j++){
@@ -12,6 +15,9 @@ void integration(laby *D, laby *Q, double const alpha, double const  g, double c
     }
 }
 
+/**
+* Sert à mettre la matrice A de l'eq A.p=b à jour à chaque itération.
+**/
 void update_A(laby *A, laby *D, laby *L ){
   for (int i = 0 ; i<12; i++){
       for (int j = 0 ; j<12 ; j++){
@@ -40,8 +46,6 @@ void update_A(laby *A, laby *D, laby *L ){
 int main(int argc, char **argv)
 {
   bool cond = true;
-  //mat Arobase = randu<mat>(4,5);
-  //std::cout << Arobase.t() << std::endl;
   laby *longueur = new laby(23);
   //lab->display();
 
@@ -49,7 +53,7 @@ int main(int argc, char **argv)
   laby *labyrinthe = new laby(23);
   laby *A = new laby(23);
   double dInit = 1;
-  double Q0 = 0.01;
+  double Q0 = 1;
   vec b= zeros<vec>(23);
   vec Pi;
   double alpha = 1;
@@ -189,14 +193,14 @@ int main(int argc, char **argv)
   for (int i =2; i<23; i++){
     b[i]=0;
   }*/
-
+/*
   //affichage de b
   std::cout << "Le vecteur b est : [" ;
   for (int i =0 ; i<23; i++){
     std::cout << b[i]<<"|" ;
   }
   std::cout << " ]" << std::endl;
-
+*/
   //initialisation de A
   for (int i = 0 ; i<23; i++){
       for (int j = 0 ; j<23 ; j++){
@@ -216,7 +220,7 @@ int main(int argc, char **argv)
     }
   }
 
-
+/*
   // affichage de A
   std::cout << "La matrcie A est :" << std::endl;
   A->display();
@@ -260,10 +264,10 @@ int main(int argc, char **argv)
     //Mettre A à jour :
     update_A(A,conductivite,longueur);
    if(count==20000) cond = false;
-  }
+ }/*
 std::cout<<count<<std::endl;
 std::cout<< "matrice A : " <<std::endl<< A->getMat().t()<<std::endl;
-std::cout<< "matrice Q : " <<std::endl<< labyrinthe->getMat().t()<<std::endl;
-std::cout<< "matrice P : " <<std::endl<< Pi.t()<<std::endl;
+std::cout<< "matrice Q : " <<std::endl<< labyrinthe->getMat().t()<<std::endl;*/
+std::cout<< "matrice P_i : " <<std::endl<< Pi.t()<<std::endl;
 return 0;
 }
