@@ -256,7 +256,7 @@ int main(int argc, char **argv)
     integration(conductivite,labyrinthe,alpha,g,pas_int);
     copie = copie - conductivite->getMat();
     //std::cout<<"copie : " << copie.t()<<std::endl;
-    if(approx_equal(copie,conductivite->getMat(),"absdiff",0)){
+    if(approx_equal(copie,conductivite->getMat(),"absdiff",0.1)){
       std::cout<<" condition à false"<<std::endl;
       cond=false;
     }
@@ -264,10 +264,11 @@ int main(int argc, char **argv)
     //Mettre A à jour :
     update_A(A,conductivite,longueur);
    if(count==20000) cond = false;
- }/*
-std::cout<<count<<std::endl;
-std::cout<< "matrice A : " <<std::endl<< A->getMat().t()<<std::endl;
-std::cout<< "matrice Q : " <<std::endl<< labyrinthe->getMat().t()<<std::endl;*/
-std::cout<< "matrice P_i : " <<std::endl<< Pi.t()<<std::endl;
+ }
+//std::cout<<count<<std::endl;
+//std::cout<< "matrice A : " <<std::endl<< A->getMat().t()<<std::endl;
+std::cout<< "matrice des Q_ij : " <<std::endl<< labyrinthe->getMat().t()<<std::endl;
+std::cout<< "matrice des D_ij : " <<std::endl<< conductivite->getMat().t()<<std::endl;
+//std::cout<< "matrice P_i : " <<std::endl<< Pi.t()<<std::endl;
 return 0;
 }
